@@ -1,4 +1,5 @@
 from django.db import models
+from db.teams import Teams
 from db.user import User
 
 
@@ -8,6 +9,7 @@ class Project(models.Model):
     description = models.CharField(max_length=1000)
     deadline = models.DateTimeField()
     progress = models.IntegerField()
+    team = models.ForeignKey(Teams, on_delete=models.CASCADE, blank=True, null=True)
     status = models.CharField(max_length=20, blank=True, null=True)
     updated_by = models.ForeignKey(User, on_delete=models.CASCADE, db_column='updated_by',
                                    related_name='project_updated_by')
