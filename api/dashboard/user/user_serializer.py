@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from db.teams import Teams
+from db.teams import Teams,TeamLink
 from db.user import User, UserRoleLink
 from utils.utils import DateTimeUtils
 
@@ -42,40 +42,17 @@ class UserDetailsEditSerializer(serializers.ModelSerializer):
             "roles",
             "teams",
             "status",
+            "created_at",
         ]
 
-    def update(self, instance, validated_data):
+    def create(self, validated_data):
         admin = self.context.get("admin")
         current_time = DateTimeUtils.get_current_utc_time()
-
         with transaction.atomic():
-            if isinstance(role_ids := validated_data.pop("roles", None), list):
-                instance.user_role_link_user.all().delete()
-                UserRoleLink.objects.bulk_create(
-                    [
-                        UserRoleLink(
-                            user=instance,
-                            role_id=role_id,
-                            created_by=admin,
-                            created_at=current_time,
-                            verified=True,
-                        )
-                        for role_id in role_ids
-                    ]
-                )
-
-            if isinstance(team_ids := validated_data.pop("teams", None), list):
-                instance.team_link_user.all().delete()
-                Teams.objects.bulk_create(
-                    [
-                        Teams(
-                            user=instance,
-                            team_id=team_id,
-                            created_by=admin,
-                            created_at=current_time,
-                        )
-                        for team_id in team_ids
-                    ]
-                )
-
-            return super().update(instance, validated_data)
+           roles = validated_data.pop("roles")
+           teams = validated_data.pop("teams")
+           team = Teams.objects.filter(id=teams).first()
+           user = User.objects.create(**validated_data)
+           print(team ,type(team)  ,user ,type(user)) 
+           TeamLink.objects.create(user=user,team=team ,team_lead=False,created_at=current_time)
+           return user
