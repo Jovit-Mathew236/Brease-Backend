@@ -10,12 +10,12 @@ from . import project_serializer
 class ProjectView(APIView):
     def get(self, request):
         projects = Project.objects.all()
-        serializer = project_serializer.ProjectSerializer(projects, many=True)
+        serializer = project_serializer.ProjectListSerializer(projects, many=True)
         return CustomResponse(response=serializer.data).get_success_response()
 
     def post(self, request):
-        serializer = project_serializer.ProjectSerializer(data=request.data)
+        serializer = project_serializer.ProjectCreateSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return ResponseNotReady(serializer.data)
-        return response(serializer.errors)
+            return CustomResponse(response=serializer.data).get_success_response()
+        return CustomResponse(response=serializer.errors).get_failure_response()
