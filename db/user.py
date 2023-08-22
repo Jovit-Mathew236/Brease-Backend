@@ -10,8 +10,10 @@ class User(models.Model):
     mobile = models.CharField(max_length=15)
     gender = models.CharField(max_length=10, blank=True, null=True)
     admin = models.BooleanField(default=False)
+    point = models.IntegerField(default=0 ,blank=True, null=True)
     active = models.BooleanField(default=True)
-    created_at = models.DateTimeField()
+    # accepted_time = models.DateTimeField(blank=True, null=True)
+    # completed_time = models.DateTimeField(blank=True, null=True)
 
     @property
     def fullname(self):
@@ -28,8 +30,8 @@ class Status(models.Model):
         User, on_delete=models.CASCADE, db_column='updated_by', related_name='updated_statuses')
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, db_column='created_by', related_name='created_statuses')
-    updated_at = models.DateTimeField()
-    created_at = models.DateTimeField()
+    # updated_at = models.DateTimeField()
+    # created_at = models.DateTimeField()
 
 
 class UserStatusLink(models.Model):
@@ -37,7 +39,7 @@ class UserStatusLink(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_status_links')
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, db_column='created_by',related_name='created_user_status_links')
-    created_at = models.DateTimeField()
+    # created_at = models.DateTimeField()
      
 
 class Role(models.Model):
@@ -47,14 +49,14 @@ class Role(models.Model):
         User, on_delete=models.CASCADE, db_column='updated_by', related_name='updated_roles')
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, db_column='created_by', related_name='created_roles')
-    updated_at = models.DateTimeField()
-    created_at = models.DateTimeField()
+    # updated_at = models.DateTimeField()
+    # created_at = models.DateTimeField()
 
 
 
 class UserRoleLink(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_role_links')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_role_link')
     role = models.ForeignKey(Role, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, db_column='created_by')
-    created_at = models.DateTimeField()
+    # created_at = models.DateTimeField()

@@ -7,8 +7,8 @@ class Teams(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=1000)
     status = models.CharField(max_length=20)
-    updated_at = models.DateTimeField()
-    created_at = models.DateTimeField()
+    # updated_at = models.DateTimeField()
+    # created_at = models.DateTimeField()
 
 
 class TeamLink(models.Model):
@@ -16,4 +16,4 @@ class TeamLink(models.Model):
     user = models.ForeignKey(User, models.DO_NOTHING)
     team = models.ForeignKey(Teams, models.DO_NOTHING)
     team_lead = models.BooleanField(default=False)
-    created_at = models.DateTimeField()
+    # created_at = models.DateTimeField()

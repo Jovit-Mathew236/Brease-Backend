@@ -17,12 +17,13 @@ class UserSerializer(serializers.ModelSerializer):
             "mobile",
             "gender",
             "role",
+            "point"
         ]
 
-    def get_roles(self, obj):
+    def get_role(self, obj):
         return [
             user_role_link.role.title
-            for user_role_link in obj.user_role_link_user.all()
+            for user_role_link in UserRoleLink.objects.filter(user=obj)
         ]
 
 class UserDetailsEditSerializer(serializers.ModelSerializer):
@@ -42,7 +43,6 @@ class UserDetailsEditSerializer(serializers.ModelSerializer):
             "roles",
             "teams",
             "status",
-            "created_at",
         ]
 
     def create(self, validated_data):
